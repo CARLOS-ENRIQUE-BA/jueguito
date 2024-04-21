@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import *
 import json
 
-server_ip = '0.0.0.0'
+server_ip = '44.196.162.180'
 server_port = 9009
 
 pygame.init()
@@ -16,7 +16,7 @@ font = pygame.font.Font(None, 20)
 estado_jugador = {'x': 50, 'y': 300, 'ready': False}  
 
 estado_global = {}
-pelotas = [] 
+pelotas = []
 
 async def actualizar_estado(websocket):
     global estado_global, pelotas

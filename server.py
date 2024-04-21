@@ -32,7 +32,7 @@ async def generar_pelotas():
                 pelota = {
                     'x': 425,
                     'y': 265,
-                    'velocidad_x': random.uniform(-6, -15),  # Velocidad reducida
+                    'velocidad_x': random.uniform(-6, -15),
                     'velocidad_y': random.choice([-1, 1])  
                 }
                 pelotas.append(pelota)
@@ -43,9 +43,14 @@ async def manejar_cliente(websocket, path):
     global contador_jugadores, tiempo_restante
     id_jugador = contador_jugadores
     contador_jugadores += 1
-    estado_global[id_jugador] = {'x': 400, 'y': 300, 'ready': False}
+    
+    
+    if len(estado_global) == 0:
+        estado_global[id_jugador] = {'x': 50, 'y': 300, 'ready': False}
+    else:
+        estado_global[id_jugador] = {'x': 800, 'y': 300, 'ready': False}
+        
     clientes.add(websocket)
-    print(f"Player {id_jugador} se ha unido al servidor.")
 
     try:
         while True:
@@ -75,16 +80,14 @@ def verificar_colisiones():
             x_pelota = pelota['x']
             y_pelota = pelota['y']
             
-            # Verificar colisión con el jugador
             if (x_jugador < x_pelota + 20 and x_jugador + 87 > x_pelota and
                 y_jugador < y_pelota + 20 and y_jugador + 120 > y_pelota):
                 pelota['velocidad_x'] *= -1  
                 pelota['velocidad_y'] *= random.choice([-1, 1])  
 
-            # Verificar colisión con los bordes laterales de la pantalla
             if x_pelota < 0:
                 puntos_jugador_derecho += 1
-                pelota['x'] = 425  # Reseteamos la posición de la pelota al centro
+                pelota['x'] = 425
                 pelota['y'] = 265
                 pelota['velocidad_x'] *= -1
             elif x_pelota > 900:
@@ -93,7 +96,6 @@ def verificar_colisiones():
                 pelota['y'] = 265
                 pelota['velocidad_x'] *= -1
 
-            # Verificar colisión con los bordes superior e inferior de la pantalla
             if y_pelota < 0 or y_pelota > 530:
                 pelota['velocidad_y'] *= -1
 
