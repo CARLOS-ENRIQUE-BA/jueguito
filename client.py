@@ -11,7 +11,6 @@ pygame.init()
 screen = pygame.display.set_mode((850, 530))
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 20)
-estado_jugador = {'x': 50, 'y': 300, 'ready': False}  
 estado_global = {}
 pelotas = [] 
 
@@ -24,7 +23,7 @@ async def actualizar_estado(websocket):
         estado_global = estado['estado_global']
         pelotas = estado.get('pelotas', [])
 
-async def enviar_movimiento(websocket):
+async def enviar_movimiento(websocket, estado_jugador):
     await websocket.send(json.dumps(estado_jugador))
     await actualizar_estado(websocket)
 
@@ -36,21 +35,21 @@ async def main():
                 if event.type == QUIT:
                     running = False
                 elif event.type == KEYDOWN and event.key == K_c:  
-                    estado_jugador['ready'] = not estado_jugador['ready']
-                    await enviar_movimiento(websocket)
+                    estado_global[websocket] = {'x': 50, 'y': 300, 'ready': not estado_global.get(websocket, {}).get('ready', False)}
+                    await enviar_movimiento(websocket, estado_global[websocket])
             
             keys = pygame.key.get_pressed()
             
-            if keys[K_UP] and estado_jugador['y'] > 0:
-                estado_jugador['y'] -= 20
-            if keys[K_DOWN] and estado_jugador['y'] < 510:
-                estado_jugador['y'] += 20
+            if keys[K_UP] and estado_global.get(websocket, {}).get('y', 300) > 0:
+                estado_global[websocket]['y'] -= 20
+            if keys[K_DOWN] and estado_global.get(websocket, {}).get('y', 300) < 510:
+                estado_global[websocket]['y'] += 20
 
-            await enviar_movimiento(websocket)
+            await enviar_movimiento(websocket, estado_global[websocket])
 
             screen.fill((0, 128, 0))  
 
-            for id_jugador, pos in estado_global.items():
+            for _, pos in estado_global.items():
                 pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(pos['x'], pos['y'], 20, 120)) 
                 
             for pelota_info in pelotas:
