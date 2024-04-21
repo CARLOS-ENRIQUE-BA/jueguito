@@ -38,9 +38,9 @@ async def manejar_cliente(websocket, path):
     id_jugador = contador_jugadores
     contador_jugadores += 1
     
-    if len(estado_global) == 0:
+    if id_jugador == 0:
         estado_global[id_jugador] = {'x': 50, 'y': 300, 'ready': False}
-    else:
+    elif id_jugador == 1:
         estado_global[id_jugador] = {'x': 800, 'y': 300, 'ready': False}
         
     await websocket.send(json.dumps(estado_global[id_jugador]))
