@@ -47,7 +47,7 @@ async def main():
             
             if keys[K_UP] and estado_global.get(id_jugador, {}).get('y', 300) > 0:
                 estado_global[id_jugador]['y'] -= 20
-            if keys[K_DOWN] and estado_global.get(id_jugador, {}).get('y', 300) < 510:
+            if keys[K_DOWN] and estado_global.get(id_jugador, {}).get('y', 300) < 410:
                 estado_global[id_jugador]['y'] += 20
 
             if id_jugador in estado_global:

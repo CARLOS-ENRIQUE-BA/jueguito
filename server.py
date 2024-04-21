@@ -102,7 +102,7 @@ def verificar_colisiones():
                     pelota['y'] = 265
                     pelota['velocidad_x'] *= -1
 
-                if y_pelota < 0 or y_pelota > 530:
+                if y_pelota < 10 or y_pelota > 520:
                     pelota['velocidad_y'] *= -1
 
 async def actualizar_estado():
