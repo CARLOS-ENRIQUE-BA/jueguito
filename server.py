@@ -5,17 +5,11 @@ import random
 
 server_ip = '0.0.0.0'
 server_port = 9009
-
 clientes = set()
-
 estado_global = {}
-
 contador_jugadores = 0
-
 pelotas = []
-
 tiempo_restante = 0
-
 puntos_jugador_izquierdo = 0
 puntos_jugador_derecho = 0
 
@@ -51,6 +45,7 @@ async def manejar_cliente(websocket, path):
         estado_global[id_jugador] = {'x': 800, 'y': 300, 'ready': False}
         
     clientes.add(websocket)
+    print(f"Player {id_jugador} ha sido conectado")
 
     try:
         while True:
