@@ -47,7 +47,7 @@ async def main():
             
             if keys[K_UP] and estado_global.get(id_jugador, {}).get('y', 300) > 0:
                 estado_global[id_jugador]['y'] -= 20
-            if keys[K_DOWN] and estado_global.get(id_jugador, {}).get('y', 300) < 410:
+            if keys[K_DOWN] and estado_global.get(id_jugador, {}).get('y', 300) < 420:
                 estado_global[id_jugador]['y'] += 20
 
             if id_jugador in estado_global:
@@ -67,11 +67,7 @@ async def main():
                 pelota_info['x'] -= 50
                 pygame.draw.circle(screen, (255, 0, 0), (int(pelota_info['x']), int(pelota_info['y'])), 10) 
 
-            mensaje_texto = None
-            if all(jugador.get('ready', False) for jugador in estado_global.values()):
-                mensaje_texto = font.render("El juego empezó!", True, (255, 255, 255))
-            else:
-                mensaje_texto = font.render(f"Todos los jugadores opriman c para comenzar ({sum(jugador.get('ready', False) for jugador in estado_global.values())}/{len(estado_global)})", True, (255, 255, 255))
+            mensaje_texto = font.render("Todos los jugadores opriman c para comenzar", True, (255, 255, 255))
             screen.blit(mensaje_texto, ((screen.get_width() - mensaje_texto.get_width()) // 2, 10))
 
             pygame.display.update()

@@ -17,9 +17,8 @@ jugadores_izquierda = 0
 jugadores_derecha = 0
 
 def verificar_todos_listos():
-    global todos_listos, jugadores_listos
+    global todos_listos
     todos_listos = all(jugador['ready'] for jugador in estado_global.values())
-    jugadores_listos = sum(jugador['ready'] for jugador in estado_global.values())
 
 async def generar_pelotas():
     intervalo = 1
@@ -58,13 +57,7 @@ async def manejar_cliente(websocket, path):
         while True:
             datos = await websocket.recv()
             movimiento = json.loads(datos)
-            estado_anterior = estado_global.get(id_jugador, {}).get('ready', False)
             estado_global[id_jugador] = movimiento
-            if movimiento['ready'] != estado_anterior:
-                if movimiento['ready']:
-                    jugadores_listos += 1
-                else:
-                    jugadores_listos -= 1
             
             if not movimiento['ready'] and tiempo_restante > 0:
                 tiempo_restante = 0
