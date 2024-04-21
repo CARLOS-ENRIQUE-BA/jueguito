@@ -86,24 +86,24 @@ def verificar_colisiones():
                 x_pelota = pelota['x']
                 y_pelota = pelota['y']
             
-            if (x_jugador < x_pelota + 20 and x_jugador + 87 > x_pelota and
-                y_jugador < y_pelota + 20 and y_jugador + 120 > y_pelota):
-                pelota['velocidad_x'] *= -1  
-                pelota['velocidad_y'] *= random.choice([-1, 1])  
+                if (x_jugador < x_pelota + 20 and x_jugador + 87 > x_pelota and
+                    y_jugador < y_pelota + 20 and y_jugador + 120 > y_pelota):
+                    pelota['velocidad_x'] *= -1  
+                    pelota['velocidad_y'] *= random.choice([-1, 1])  
 
-            if x_pelota < 0:
-                puntos_jugador_derecho += 1
-                pelota['x'] = 425
-                pelota['y'] = 265
-                pelota['velocidad_x'] *= -1
-            elif x_pelota > 900:
-                puntos_jugador_izquierdo += 1
-                pelota['x'] = 425
-                pelota['y'] = 265
-                pelota['velocidad_x'] *= -1
+                if x_pelota < 0:
+                    puntos_jugador_derecho += 1
+                    pelota['x'] = 425
+                    pelota['y'] = 265
+                    pelota['velocidad_x'] *= -1
+                elif x_pelota > 900:
+                    puntos_jugador_izquierdo += 1
+                    pelota['x'] = 425
+                    pelota['y'] = 265
+                    pelota['velocidad_x'] *= -1
 
-            if y_pelota < 0 or y_pelota > 530:
-                pelota['velocidad_y'] *= -1
+                if y_pelota < 0 or y_pelota > 530:
+                    pelota['velocidad_y'] *= -1
 
 async def actualizar_estado():
     global tiempo_restante

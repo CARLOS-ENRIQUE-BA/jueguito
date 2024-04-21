@@ -36,7 +36,11 @@ async def main():
                 if event.type == QUIT:
                     running = False
                 elif event.type == KEYDOWN and event.key == K_c:  
-                    estado_global[id_jugador] = {'ready': not estado_global.get(id_jugador, {}).get('ready', False)}
+                    estado_global[id_jugador] = {
+                        'x': estado_global.get(id_jugador, {}).get('x', 100),
+                        'y': estado_global.get(id_jugador, {}).get('y', 300),
+                        'ready': not estado_global.get(id_jugador, {}).get('ready', False)
+                    }
                     await enviar_movimiento(websocket, estado_global[id_jugador])
             
             keys = pygame.key.get_pressed()
