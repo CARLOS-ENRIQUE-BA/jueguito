@@ -67,7 +67,6 @@ async def main():
                 pelota_info['x'] -= 50
                 pygame.draw.circle(screen, (255, 0, 0), (int(pelota_info['x']), int(pelota_info['y'])), 10)
 
-            # Mostrar mensaje según el estado de listo de los jugadores
             if len(estado_global) == 0:
                 mensaje_texto = font.render("Todos los jugadores opriman c para comenzar (0/2)", True, (255, 255, 255))
             elif all(jugador['ready'] for jugador in estado_global.values()):
