@@ -29,23 +29,24 @@ async def enviar_movimiento(websocket, estado_jugador):
 
 async def main():
     async with websockets.connect(f"ws://{server_ip}:{server_port}") as websocket:
+        id_jugador = await websocket.recv()  # Recibir el id del jugador del servidor
         running = True
         while running:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     running = False
                 elif event.type == KEYDOWN and event.key == K_c:  
-                    estado_global[websocket] = {'ready': not estado_global.get(websocket, {}).get('ready', False)}
-                    await enviar_movimiento(websocket, estado_global[websocket])
+                    estado_global[id_jugador] = {'ready': not estado_global.get(id_jugador, {}).get('ready', False)}
+                    await enviar_movimiento(websocket, estado_global[id_jugador])
             
             keys = pygame.key.get_pressed()
             
-            if keys[K_UP] and estado_global.get(websocket, {}).get('y', 300) > 0:
-                estado_global[websocket]['y'] -= 20
-            if keys[K_DOWN] and estado_global.get(websocket, {}).get('y', 300) < 510:
-                estado_global[websocket]['y'] += 20
+            if keys[K_UP] and estado_global.get(id_jugador, {}).get('y', 300) > 0:
+                estado_global[id_jugador]['y'] -= 20
+            if keys[K_DOWN] and estado_global.get(id_jugador, {}).get('y', 300) < 510:
+                estado_global[id_jugador]['y'] += 20
 
-            await enviar_movimiento(websocket, estado_global[websocket])
+            await enviar_movimiento(websocket, estado_global[id_jugador])
 
             screen.fill((0, 128, 0))  
 

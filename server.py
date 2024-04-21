@@ -57,6 +57,7 @@ async def manejar_cliente(websocket, path):
     clientes.add(websocket)
     print(f"Player {id_jugador} se ha unido al servidor.")
 
+    await websocket.send(str(id_jugador))
     try:
         while True:
             datos = await websocket.recv()
