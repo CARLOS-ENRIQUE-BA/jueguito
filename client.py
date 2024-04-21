@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import *
 import json
 
-server_ip = '34.226.111.91'
+server_ip = '0.0.0.0'
 server_port = 9009
 
 pygame.init()
@@ -13,16 +13,7 @@ clock = pygame.time.Clock()
 
 font = pygame.font.Font(None, 20)
 
-# Definir la posición inicial del jugador en función del lado de la pantalla
-if server_ip == '0.0.0.0':
-    jugador_lado = 'izquierdo'
-else:
-    jugador_lado = 'derecho'
-
-if jugador_lado == 'izquierdo':
-    estado_jugador = {'x': 50, 'y': 300, 'ready': False}
-else:
-    estado_jugador = {'x': 750, 'y': 300, 'ready': False}
+estado_jugador = {'x': 50, 'y': 300, 'ready': False}  
 
 estado_global = {}
 pelotas = [] 
