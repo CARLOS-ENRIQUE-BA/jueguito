@@ -12,7 +12,7 @@ screen = pygame.display.set_mode((850, 530))
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 20)
 estado_global = {}
-pelotas = [] 
+pelotas = []
 
 async def actualizar_estado(websocket):
     global estado_global, pelotas
@@ -35,19 +35,19 @@ async def main():
             for event in pygame.event.get():
                 if event.type == QUIT:
                     running = False
-                elif event.type == KEYDOWN and event.key == K_c:  
+                elif event.type == KEYDOWN and event.key == K_c:
                     estado_global[id_jugador] = {
                         'x': estado_global.get(id_jugador, {}).get('x', 100),
                         'y': estado_global.get(id_jugador, {}).get('y', 300),
                         'ready': not estado_global.get(id_jugador, {}).get('ready', False)
                     }
                     await enviar_movimiento(websocket, estado_global[id_jugador])
-            
+
             keys = pygame.key.get_pressed()
-            
+
             if keys[K_UP] and estado_global.get(id_jugador, {}).get('y', 300) > 0:
                 estado_global[id_jugador]['y'] -= 20
-            if keys[K_DOWN] and estado_global.get(id_jugador, {}).get('y', 300) < 420:
+            if keys[K_DOWN] and estado_global.get(id_jugador, {}).get('y', 300) < 410:
                 estado_global[id_jugador]['y'] += 20
 
             if id_jugador in estado_global:
@@ -56,18 +56,24 @@ async def main():
                 estado_global[id_jugador] = {'x': 100, 'y': 300, 'ready': False}
                 await enviar_movimiento(websocket, estado_global[id_jugador])
 
-            screen.fill((0, 128, 0))  
+            screen.fill((0, 128, 0))
 
             for _, pos in estado_global.items():
                 x = pos.get('x', 100)
                 y = pos.get('y', 300)
                 pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(x, y, 20, 120))
-                
+
             for pelota_info in pelotas:
                 pelota_info['x'] -= 50
-                pygame.draw.circle(screen, (255, 0, 0), (int(pelota_info['x']), int(pelota_info['y'])), 10) 
+                pygame.draw.circle(screen, (255, 0, 0), (int(pelota_info['x']), int(pelota_info['y'])), 10)
 
-            mensaje_texto = font.render("Todos los jugadores opriman c para comenzar", True, (255, 255, 255))
+            # Mostrar mensaje según el estado de listo de los jugadores
+            if len(estado_global) == 0:
+                mensaje_texto = font.render("Todos los jugadores opriman c para comenzar (0/2)", True, (255, 255, 255))
+            elif all(jugador['ready'] for jugador in estado_global.values()):
+                mensaje_texto = font.render("El juego empezó!", True, (255, 255, 255))
+            else:
+                mensaje_texto = font.render(f"Todos los jugadores opriman c para comenzar ({len(estado_global)}/2)", True, (255, 255, 255))
             screen.blit(mensaje_texto, ((screen.get_width() - mensaje_texto.get_width()) // 2, 10))
 
             pygame.display.update()
