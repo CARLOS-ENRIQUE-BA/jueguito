@@ -77,13 +77,14 @@ async def manejar_cliente(websocket, path):
 
 def verificar_colisiones():
     global tiempo_restante, puntos_jugador_izquierdo, puntos_jugador_derecho
-    for id_jugador, jugador in estado_global.items():
-        x_jugador = jugador['x']
-        y_jugador = jugador['y']
+    for id_jugador, jugador in list(estado_global.items()):
+        if 'x' in jugador and 'y' in jugador:
+            x_jugador = jugador['x']
+            y_jugador = jugador['y']
         
-        for pelota in pelotas:
-            x_pelota = pelota['x']
-            y_pelota = pelota['y']
+            for pelota in pelotas:
+                x_pelota = pelota['x']
+                y_pelota = pelota['y']
             
             if (x_jugador < x_pelota + 20 and x_jugador + 87 > x_pelota and
                 y_jugador < y_pelota + 20 and y_jugador + 120 > y_pelota):
