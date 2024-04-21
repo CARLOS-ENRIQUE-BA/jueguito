@@ -5,13 +5,22 @@ import random
 
 server_ip = '0.0.0.0'
 server_port = 9009
+
 clientes = set()
+
 estado_global = {}
+
 contador_jugadores = 0
+
 pelotas = []
+
 tiempo_restante = 0
+
 puntos_jugador_izquierdo = 0
 puntos_jugador_derecho = 0
+
+jugadores_izquierda = 0
+jugadores_derecha = 0
 
 def verificar_todos_listos():
     global todos_listos
@@ -26,7 +35,7 @@ async def generar_pelotas():
                 pelota = {
                     'x': 425,
                     'y': 265,
-                    'velocidad_x': random.uniform(-6, -15),
+                    'velocidad_x': random.uniform(-6, -15),  # Velocidad reducida
                     'velocidad_y': random.choice([-1, 1])  
                 }
                 pelotas.append(pelota)
@@ -34,10 +43,17 @@ async def generar_pelotas():
         await asyncio.sleep(intervalo)
 
 async def manejar_cliente(websocket, path):
-    global contador_jugadores, tiempo_restante
+    global contador_jugadores, tiempo_restante, jugadores_izquierda, jugadores_derecha
     id_jugador = contador_jugadores
     contador_jugadores += 1
-    estado_global[id_jugador] = {'x': 400, 'y': 300, 'ready': False}
+    
+    if jugadores_izquierda <= jugadores_derecha:
+        estado_global[id_jugador] = {'x': 100, 'y': 300, 'ready': False}
+        jugadores_izquierda += 1
+    else:
+        estado_global[id_jugador] = {'x': 700, 'y': 300, 'ready': False}
+        jugadores_derecha += 1
+    
     clientes.add(websocket)
     print(f"Player {id_jugador} se ha unido al servidor.")
 
@@ -58,6 +74,11 @@ async def manejar_cliente(websocket, path):
         if id_jugador in estado_global:
             del estado_global[id_jugador]
             print(f"Player {id_jugador} ha sido eliminado")
+            if id_jugador in estado_global:
+                if estado_global[id_jugador]['x'] == 100:
+                    jugadores_izquierda -= 1
+                else:
+                    jugadores_derecha -= 1
 
 def verificar_colisiones():
     global tiempo_restante, puntos_jugador_izquierdo, puntos_jugador_derecho

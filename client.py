@@ -41,11 +41,10 @@ async def main():
             
             keys = pygame.key.get_pressed()
             
-            # Ajustando la velocidad de movimiento del jugador
             if keys[K_UP] and estado_jugador['y'] > 0:
-                estado_jugador['y'] -= 20  # Doble de rápido
+                estado_jugador['y'] -= 20
             if keys[K_DOWN] and estado_jugador['y'] < 510:
-                estado_jugador['y'] += 20  # Doble de rápido
+                estado_jugador['y'] += 20
 
             await enviar_movimiento(websocket)
 
@@ -55,7 +54,7 @@ async def main():
                 pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(pos['x'], pos['y'], 20, 120)) 
                 
             for pelota_info in pelotas:
-                pelota_info['x'] -= 50 # Triple de rápido
+                pelota_info['x'] -= 50
                 pygame.draw.circle(screen, (255, 0, 0), (int(pelota_info['x']), int(pelota_info['y'])), 10) 
 
             mensaje_texto = font.render("Todos los jugadores opriman c para comenzar", True, (255, 255, 255))
