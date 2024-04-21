@@ -37,16 +37,9 @@ async def manejar_cliente(websocket, path):
     global contador_jugadores, tiempo_restante
     id_jugador = contador_jugadores
     contador_jugadores += 1
-    
-    if id_jugador == 0:
-        estado_global[id_jugador] = {'x': 50, 'y': 300, 'ready': False}
-    elif id_jugador == 1:
-        estado_global[id_jugador] = {'x': 800, 'y': 300, 'ready': False}
-        
-    await websocket.send(json.dumps(estado_global[id_jugador]))
-    
+    estado_global[id_jugador] = {'x': 400, 'y': 300, 'ready': False}
     clientes.add(websocket)
-    print(f"Player {id_jugador} ha sido conectado")
+    print(f"Player {id_jugador} se ha unido al servidor.")
 
     try:
         while True:

@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import *
 import json
 
-server_ip = '44.196.162.180'
+server_ip = '0.0.0.0'
 server_port = 9009
 
 pygame.init()
@@ -13,7 +13,7 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 20)
 estado_jugador = {'x': 50, 'y': 300, 'ready': False}  
 estado_global = {}
-pelotas = []
+pelotas = [] 
 
 async def actualizar_estado(websocket):
     global estado_global, pelotas
@@ -30,8 +30,6 @@ async def enviar_movimiento(websocket):
 
 async def main():
     async with websockets.connect(f"ws://{server_ip}:{server_port}") as websocket:
-        data = await websocket.recv()
-        estado_jugador = json.loads(data)
         running = True
         while running:
             for event in pygame.event.get():
@@ -43,10 +41,11 @@ async def main():
             
             keys = pygame.key.get_pressed()
             
+            # Ajustando la velocidad de movimiento del jugador
             if keys[K_UP] and estado_jugador['y'] > 0:
-                estado_jugador['y'] -= 20
+                estado_jugador['y'] -= 20  # Doble de rápido
             if keys[K_DOWN] and estado_jugador['y'] < 510:
-                estado_jugador['y'] += 20
+                estado_jugador['y'] += 20  # Doble de rápido
 
             await enviar_movimiento(websocket)
 
@@ -56,7 +55,7 @@ async def main():
                 pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(pos['x'], pos['y'], 20, 120)) 
                 
             for pelota_info in pelotas:
-                pelota_info['x'] -= 50
+                pelota_info['x'] -= 50 # Triple de rápido
                 pygame.draw.circle(screen, (255, 0, 0), (int(pelota_info['x']), int(pelota_info['y'])), 10) 
 
             mensaje_texto = font.render("Todos los jugadores opriman c para comenzar", True, (255, 255, 255))
