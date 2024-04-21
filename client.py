@@ -29,7 +29,7 @@ async def enviar_movimiento(websocket, estado_jugador):
 
 async def main():
     async with websockets.connect(f"ws://{server_ip}:{server_port}") as websocket:
-        id_jugador = await websocket.recv()  # Recibir el id del jugador del servidor
+        id_jugador = await websocket.recv()
         running = True
         while running:
             for event in pygame.event.get():
@@ -55,7 +55,9 @@ async def main():
             screen.fill((0, 128, 0))  
 
             for _, pos in estado_global.items():
-                pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(pos['x'], pos['y'], 20, 120)) 
+                x = pos.get('x', 100)
+                y = pos.get('y', 300)
+                pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(x, y, 20, 120))
                 
             for pelota_info in pelotas:
                 pelota_info['x'] -= 50
