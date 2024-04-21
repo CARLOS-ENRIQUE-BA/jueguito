@@ -5,20 +5,13 @@ import random
 
 server_ip = '0.0.0.0'
 server_port = 9009
-
 clientes = set()
-
 estado_global = {}
-
 contador_jugadores = 0
-
 pelotas = []
-
 tiempo_restante = 0
-
 puntos_jugador_izquierdo = 0
 puntos_jugador_derecho = 0
-
 jugadores_izquierda = 0
 jugadores_derecha = 0
 
@@ -35,7 +28,7 @@ async def generar_pelotas():
                 pelota = {
                     'x': 425,
                     'y': 265,
-                    'velocidad_x': random.uniform(-6, -15),  # Velocidad reducida
+                    'velocidad_x': random.uniform(-6, -15),
                     'velocidad_y': random.choice([-1, 1])  
                 }
                 pelotas.append(pelota)
@@ -53,11 +46,12 @@ async def manejar_cliente(websocket, path):
     else:
         estado_global[id_jugador] = {'x': 700, 'y': 300, 'ready': False}
         jugadores_derecha += 1
+        
+    await websocket.send(str(id_jugador))
     
     clientes.add(websocket)
     print(f"Player {id_jugador} se ha unido al servidor.")
-
-    await websocket.send(str(id_jugador))
+    
     try:
         while True:
             datos = await websocket.recv()

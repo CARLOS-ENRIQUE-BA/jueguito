@@ -46,7 +46,11 @@ async def main():
             if keys[K_DOWN] and estado_global.get(id_jugador, {}).get('y', 300) < 510:
                 estado_global[id_jugador]['y'] += 20
 
-            await enviar_movimiento(websocket, estado_global[id_jugador])
+            if id_jugador in estado_global:
+                await enviar_movimiento(websocket, estado_global[id_jugador])
+            else:
+                estado_global[id_jugador] = {'x': 100, 'y': 300, 'ready': False}
+                await enviar_movimiento(websocket, estado_global[id_jugador])
 
             screen.fill((0, 128, 0))  
 
