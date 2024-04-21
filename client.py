@@ -10,11 +10,8 @@ server_port = 9009
 pygame.init()
 screen = pygame.display.set_mode((850, 530))
 clock = pygame.time.Clock()
-
 font = pygame.font.Font(None, 20)
-
 estado_jugador = {'x': 50, 'y': 300, 'ready': False}  
-
 estado_global = {}
 pelotas = []
 
@@ -33,6 +30,8 @@ async def enviar_movimiento(websocket):
 
 async def main():
     async with websockets.connect(f"ws://{server_ip}:{server_port}") as websocket:
+        data = await websocket.recv()
+        estado_jugador = json.loads(data)
         running = True
         while running:
             for event in pygame.event.get():
