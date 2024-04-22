@@ -92,8 +92,12 @@ def verificar_colisiones():
                     pelota['velocidad_x'] *= -1  
                     pelota['velocidad_y'] *= random.choice([-1, 1]) 
                 
-                if x_pelota < 0 or x_pelota > 850:
-                    juego_terminado = True 
+                if x_pelota < 0:
+                    juego_terminado = True
+                    estado_global[id_jugador]['ganador'] = False if jugador['x'] == 100 else True
+                elif x_pelota > 850:
+                    juego_terminado = True
+                    estado_global[id_jugador]['ganador'] = True if jugador['x'] == 100 else False
 
                 if y_pelota < 10 or y_pelota > 520:
                     pelota['velocidad_y'] *= -1
