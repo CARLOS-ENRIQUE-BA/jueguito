@@ -10,7 +10,7 @@ server_port = 9009
 pygame.init()
 screen = pygame.display.set_mode((850, 530))
 clock = pygame.time.Clock()
-font = pygame.font.Font(None, 20)
+font = pygame.font.Font(None, 25)
 estado_global = {}
 pelotas = []
 juego_terminado = False 
@@ -35,7 +35,11 @@ async def main():
         running = True
         while running:
             if juego_terminado:
+                mensaje_perdedor = font.render("Perdiste", True, (255, 255, 255))
+                screen.blit(mensaje_perdedor, ((screen.get_width() - mensaje_perdedor.get_width()) // 2, 90))
                 print("Juego terminado")
+                pygame.display.update()
+                pygame.time.wait(2000)
                 running = False
                 break
             for event in pygame.event.get():
