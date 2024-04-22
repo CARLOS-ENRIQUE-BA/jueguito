@@ -10,7 +10,6 @@ estado_global = {}
 contador_jugadores = 0
 jugadores_listos = 0
 pelotas = []
-tiempo_restante = 0
 puntos_jugador_izquierdo = 0
 puntos_jugador_derecho = 0
 jugadores_izquierda = 0
@@ -24,7 +23,7 @@ async def generar_pelotas():
     intervalo = 1
 
     while True:
-        if clientes and todos_listos and tiempo_restante > 0:
+        if clientes and todos_listos:
             if not pelotas:
                 pelota = {
                     'x': 425,
@@ -37,7 +36,7 @@ async def generar_pelotas():
         await asyncio.sleep(intervalo)
 
 async def manejar_cliente(websocket, path):
-    global contador_jugadores, tiempo_restante, jugadores_izquierda, jugadores_derecha
+    global contador_jugadores, jugadores_izquierda, jugadores_derecha
     id_jugador = contador_jugadores
     contador_jugadores += 1
     
@@ -59,8 +58,7 @@ async def manejar_cliente(websocket, path):
             movimiento = json.loads(datos)
             estado_global[id_jugador] = movimiento
             
-            if not movimiento['ready'] and tiempo_restante > 0:
-                tiempo_restante = 0
+            if not movimiento['ready']:
                 pelotas.clear()
 
     except websockets.ConnectionClosed:
@@ -77,7 +75,7 @@ async def manejar_cliente(websocket, path):
                     jugadores_derecha -= 1
 
 def verificar_colisiones():
-    global tiempo_restante, puntos_jugador_izquierdo, puntos_jugador_derecho
+    global puntos_jugador_izquierdo, puntos_jugador_derecho
     for id_jugador, jugador in list(estado_global.items()):
         if 'x' in jugador and 'y' in jugador:
             x_jugador = jugador['x']
@@ -107,22 +105,14 @@ def verificar_colisiones():
                     pelota['velocidad_y'] *= -1
 
 async def actualizar_estado():
-    global tiempo_restante
-
     while True:
         verificar_todos_listos()
 
-        if todos_listos and tiempo_restante == 0:
-            tiempo_restante = 120
+        if todos_listos:
             asyncio.create_task(generar_pelotas())
         
-        if todos_listos and tiempo_restante > 0:
-            tiempo_restante -= 0.1
+        if todos_listos:
             verificar_colisiones()
-
-            if tiempo_restante <= 0:
-                tiempo_restante = 0
-                pelotas.clear()
         
         for pelota in pelotas:
             pelota['x'] += pelota['velocidad_x']
@@ -133,7 +123,6 @@ async def actualizar_estado():
         estado = {
             'estado_global': estado_global,
             'pelotas': pelotas,
-            'tiempo_restante': tiempo_restante,
             'puntos_jugador_izquierdo': puntos_jugador_izquierdo,
             'puntos_jugador_derecho': puntos_jugador_derecho
         }
