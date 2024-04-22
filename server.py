@@ -115,7 +115,8 @@ async def actualizar_estado():
             'estado_global': estado_global,
             'pelotas': pelotas,
             'puntos_jugador_izquierdo': puntos_jugador_izquierdo,
-            'puntos_jugador_derecho': puntos_jugador_derecho
+            'puntos_jugador_derecho': puntos_jugador_derecho,
+            'juego_terminado': juego_terminado
         }
 
         estado_json = json.dumps(estado)

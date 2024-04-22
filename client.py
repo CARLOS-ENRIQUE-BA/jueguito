@@ -35,6 +35,7 @@ async def main():
         running = True
         while running:
             if juego_terminado:
+                print("Juego terminado")
                 running = False
                 break
             for event in pygame.event.get():
