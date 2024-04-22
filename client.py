@@ -37,7 +37,6 @@ async def main():
             if juego_terminado:
                 mensaje_perdedor = font.render("Perdiste", True, (255, 255, 255))
                 screen.blit(mensaje_perdedor, ((screen.get_width() - mensaje_perdedor.get_width()) // 2, 90))
-                print("Juego terminado")
                 pygame.display.update()
                 pygame.time.wait(2000)
                 running = False

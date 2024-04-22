@@ -37,7 +37,7 @@ async def generar_pelotas():
         await asyncio.sleep(intervalo)
 
 async def manejar_cliente(websocket, path):
-    global contador_jugadores, jugadores_izquierda, jugadores_derecha
+    global contador_jugadores, jugadores_izquierda, jugadores_derecha, juego_terminado
     id_jugador = contador_jugadores
     contador_jugadores += 1
     
@@ -74,6 +74,7 @@ async def manejar_cliente(websocket, path):
                     jugadores_izquierda -= 1
                 else:
                     jugadores_derecha -= 1
+        juego_terminado = False
 
 def verificar_colisiones():
     global puntos_jugador_izquierdo, puntos_jugador_derecho, juego_terminado
