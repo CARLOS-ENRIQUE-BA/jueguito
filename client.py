@@ -12,16 +12,18 @@ screen = pygame.display.set_mode((850, 530))
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 20)
 estado_global = {}
-pelotas = [] 
+pelotas = []
+juego_terminado = False 
 
 async def actualizar_estado(websocket):
-    global estado_global, pelotas
+    global estado_global, pelotas, juego_terminado
 
     data = await websocket.recv()
     if data:
         estado = json.loads(data)
         estado_global = estado['estado_global']
         pelotas = estado.get('pelotas', [])
+        juego_terminado = estado.get('juego_terminado', False)
 
 async def enviar_movimiento(websocket, estado_jugador):
     await websocket.send(json.dumps(estado_jugador))
@@ -32,6 +34,9 @@ async def main():
         id_jugador = await websocket.recv()
         running = True
         while running:
+            if juego_terminado:
+                running = False
+                break
             for event in pygame.event.get():
                 if event.type == QUIT:
                     running = False

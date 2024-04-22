@@ -5,15 +5,16 @@ import random
 
 server_ip = '0.0.0.0'
 server_port = 9009
-clientes = set()
+pelotas = []
 estado_global = {}
+clientes = set()
 contador_jugadores = 0
 jugadores_listos = 0
-pelotas = []
 puntos_jugador_izquierdo = 0
 puntos_jugador_derecho = 0
 jugadores_izquierda = 0
 jugadores_derecha = 0
+juego_terminado = False
 
 def verificar_todos_listos():
     global todos_listos
@@ -75,7 +76,7 @@ async def manejar_cliente(websocket, path):
                     jugadores_derecha -= 1
 
 def verificar_colisiones():
-    global puntos_jugador_izquierdo, puntos_jugador_derecho
+    global puntos_jugador_izquierdo, puntos_jugador_derecho, juego_terminado
     for id_jugador, jugador in list(estado_global.items()):
         if 'x' in jugador and 'y' in jugador:
             x_jugador = jugador['x']
@@ -88,7 +89,10 @@ def verificar_colisiones():
                 if (x_jugador < x_pelota + 20 and x_jugador + 87 > x_pelota and
                     y_jugador < y_pelota + 20 and y_jugador + 120 > y_pelota):
                     pelota['velocidad_x'] *= -1  
-                    pelota['velocidad_y'] *= random.choice([-1, 1])  
+                    pelota['velocidad_y'] *= random.choice([-1, 1]) 
+                
+                if x_pelota < 0 or x_pelota > 850:
+                    juego_terminado = True 
 
                 if y_pelota < 10 or y_pelota > 520:
                     pelota['velocidad_y'] *= -1
